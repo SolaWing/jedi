@@ -91,5 +91,12 @@ def print_to_stdout(level, str_out):
         str_out = str_out.encode(encoding, 'replace')
     print(col + str_out + Fore.RESET)
 
+#f = open("/Users/mac/jedy.log", "a")
+#f.write("------------------------------ begin ------------------------------\n")
+#def print_to_logFile(level, str_out):
+#    print >> f,  str_out
+#    f.flush()
+#debug_function = print_to_logFile
+
 
 # debug_function = print_to_stdout

@@ -18,6 +18,7 @@ from jedi.parser.token import (tok_name, N_TOKENS, ENDMARKER, STRING, NUMBER,
                                NAME, OP, ERRORTOKEN, NEWLINE, INDENT, DEDENT)
 from jedi._compatibility import is_py3
 
+from jedi import debug
 
 cookie_re = re.compile("coding[:=]\s*([-\w.]+)")
 
@@ -235,8 +236,14 @@ def generate_tokens(readline):
                     additional_prefix = prefix + token
                 new_line = True
             elif initial == '#':  # Comments
-                assert not token.endswith("\n")
-                additional_prefix = prefix + token
+                # use #!! as comment type tip, the statement following #!! will be treat as normal statement
+                if pos - start > 4 and line[start:start+3] == '#!!':
+                    pos = start + 3
+                    debug.dbg("#!!%d:%d", lnum, pos)
+                    yield OP, ";", spos, prefix
+                else:
+                    assert not token.endswith("\n")
+                    additional_prefix = prefix + token
             elif token in triple_quoted:
                 endprog = endprogs[token]
                 endmatch = endprog.match(line, pos)
